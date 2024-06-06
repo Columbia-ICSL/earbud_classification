@@ -289,6 +289,7 @@ functions = {
 def train_challenge_model_full(
     data_folder, model_folder, verbose, hparams=None, load_old_file=False, gpu=True, quick=False, mels = True
 ):
+    
     if hparams is None:
         # Use same default parameters CUED_Acoustics PhysioNet entry
         hparams = {

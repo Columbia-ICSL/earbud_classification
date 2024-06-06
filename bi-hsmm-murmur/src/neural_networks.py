@@ -370,7 +370,7 @@ class RecurrentNetworkModel(nn.Module):
                 d_state=16,  # SSM state expansion factor
                 d_conv=4,    # Local convolution width
                 expand=2,    #  Block expansion factori
-                n_mamba = 2, #originally 9
+                n_mamba = 9, 
                 bidirectional=True,
 
             )
