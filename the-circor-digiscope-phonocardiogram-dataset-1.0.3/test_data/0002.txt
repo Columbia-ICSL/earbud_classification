@@ -1,0 +1,23 @@
+0002 1 48000
+AV 0002_AV.hea 0002_AV.wav 0002_AV.ts
+#Age: Adult
+#Sex: Male
+#Height: 170.0
+#Weight: 72
+#Pregnancy status: False
+#Murmur: Absemt
+#Murmur locations: None
+#Most audible location: None
+#Systolic murmur timing: Holosystolic
+#Systolic murmur shape: Diamond
+#Systolic murmur grading: III/VI
+#Systolic murmur pitch: High
+#Systolic murmur quality: Harsh
+#Diastolic murmur timing: nan
+#Diastolic murmur shape: nan
+#Diastolic murmur grading: nan
+#Diastolic murmur pitch: nan
+#Diastolic murmur quality: nan
+#Campaign: CC2014
+#Additional ID: nan
+#Outcome: Abnormal    v
