@@ -1,0 +1,23 @@
+Umich07_eb7_t03_s01_v02_lpfilt 1 4000
+Umich07_eb7_t03_s01_v02_lpfilt 2530_AV.hea Umich07_eb7_t03_s01_v02_lpfilt.wav 2530_AV.tsv
+#Age: Child
+#Sex: Female
+#Height: 98.0
+#Weight: 15.9
+#Pregnancy status: False
+#Murmur: Present
+#Murmur locations: nan
+#Most audible location: nan
+#Systolic murmur timing: nan
+#Systolic murmur shape: nan
+#Systolic murmur grading: nan
+#Systolic murmur pitch: nan
+#Systolic murmur quality: nan
+#Diastolic murmur timing: nan
+#Diastolic murmur shape: nan
+#Diastolic murmur grading: nan
+#Diastolic murmur pitch: nan
+#Diastolic murmur quality: nan
+#Outcome: Abnormal
+#Campaign: CC2015
+#Additional ID: nan

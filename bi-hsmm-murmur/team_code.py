@@ -287,12 +287,11 @@ functions = {
 
 
 def train_challenge_model_full(
-    data_folder, model_folder, verbose, hparams=None, load_old_file=False, gpu=True, quick=False
+    data_folder, model_folder, verbose, hparams=None, load_old_file=False, gpu=True, quick=False, mels = True
 ):
     if hparams is None:
         # Use same default parameters CUED_Acoustics PhysioNet entry
         hparams = {
-            "rnn_type" : 'Mamba',
             "rnn_hidden_size": 60,
             "rnn_num_layers": 3,
             "rnn_dropout": 0.1,

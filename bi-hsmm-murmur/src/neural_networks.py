@@ -283,6 +283,8 @@ def calculate_features(recording: torch.Tensor, fs: int, norm=True) -> Tuple[tor
 def calculate_features(recording: torch.Tensor, fs: int, norm=True) -> Tuple[torch.Tensor, int]:
     assert fs == FREQUENCY_SAMPLING
     # Zero-mean and normalise by peak amplitude
+
+
     recording = recording.float()
     recording -= recording.mean()
     recording /= recording.abs().max()
@@ -303,32 +305,29 @@ def calculate_features(recording: torch.Tensor, fs: int, norm=True) -> Tuple[tor
         .sum(dim=-1)
     )
 
-    #NUM_MELS = min(calc_frequency_bins(), spectrogram.shape[1])  # Set a maximum value of 1146 to avoid excessive computation
     spectrogram = spectrogram[: calc_frequency_bins()]
 
+    
     NUM_MELS = spectrogram.shape[1]
-    #print(NUM_MELS)
     # Apply mel filterbank
     mel_transform = transforms.MelSpectrogram(
         sample_rate=fs,
         n_fft=window_length,
         hop_length=window_step,
         n_mels=    NUM_MELS 
-
     )
 
     mel_spectrogram = mel_transform(spectrogram)
 
     features_fs = int(1 / WINDOW_STEP)
 
-   # print(mel_spectrogram[:, :, 0], mel_spectrogram[:,:,1])
-
     m_spec = mel_spectrogram[:,:,0]
-    del mel_spectrogram
-
-    
+    del mel_spectrogram        
 
     return m_spec, features_fs
+
+     
+
 
 #"""
 
@@ -357,7 +356,6 @@ class RecurrentNetworkModel(nn.Module):
     ) -> None:
         super().__init__()
         if rnn_type == 'GRU' :
-            print('GRU used')
             self.rnn = nn.GRU(
                 input_size=calc_frequency_bins(),
                 hidden_size=rnn_hidden_size,
@@ -367,7 +365,6 @@ class RecurrentNetworkModel(nn.Module):
                 dropout=rnn_dropout,
             )
         elif rnn_type == 'Mamba':
-            print('mamba used')
             self.rnn = MambaBlocksSequential(
                 d_model=dim, # Model dimension d_model
                 d_state=16,  # SSM state expansion factor

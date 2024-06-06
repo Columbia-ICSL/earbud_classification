@@ -4,7 +4,7 @@
 
 # This file contains functions for training models for the 2022 Challenge. You can run it as follows:
 #
-#   python train_model.py data model
+#   python train_model.py data model mels_true 
 #
 # where 'data' is a folder containing the Challenge data and 'model' is a folder for saving your model.
 
@@ -28,6 +28,7 @@ if __name__ == "__main__":
         verbose = int(sys.argv[3])
     else:
         verbose = 1
+
 
     train_challenge_model(
         data_folder, model_folder, verbose

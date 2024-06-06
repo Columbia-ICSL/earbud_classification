@@ -1,0 +1,29 @@
+01 Apex Normal_S1_S2 0s Supine Bell
+01b Apex Normal_S1_S2 17s Supine Bell
+01c Apex Normal_S1_S2 41s Supine Bell
+02 Apex Split_S1_S2 0s Supine Bell
+03 Apex S4 0s LLD Bell
+04 Apex Mid_Sys_Click 0s Supine Bell
+05 Apex S3 0s LLD Bell
+06 Apex Early_Sys_Mur 0s Supine Bell
+06b Apex Early_Sys_Mur 27s Supine Bell
+07 Apex Mid_Sys_Mur 0s Supine Bell
+07b Apex Mid_Sys_Mur 38s Supine Bell
+08 Apex Late_Sys_Mur 0s Supine Bell
+08b Apex Late_Sys_Mur 19s Supine Bell
+09 Apex Holo_Sys_Mur 0s Supine Bell
+09b Apex Holo_Sys_Mur 45s Supine Bell
+10 Apex Sys_Click_Late_Sys_Mur LLD Bell
+11 Apex S4_Mid_Sys_Mur LLD Bell
+12 Apex S3_Holo_Sys_Mur LLD Bell
+13 Apex OS_Dias_Mur LLD Bell
+14 Apex Normal_S1_S2 Sitting Bell
+15 Aortic Sys_Mur_Absent_S2 Sitting Bell
+16 Aortic Early_Dias_Mur Sitting Bell
+17 Aortic Sys_Dias_Mur Sitting Bell
+18 Pulm Single_S2 Supine Diaph
+19 Pulm Spilt_S2_Persistent Supine Diaph
+20 Pulm Spilt_S2_Transient Supine Diaph
+21 Pulm Eject_Sys_Mur_Trans_Split_S2 Supine Diaph
+22 Pulm Split_S2_Eject_Sys_Mur Supine Diaph
+23 Pulm Eject_Sys_Mur_Single_S2_Eject_Click Supine Diaph
