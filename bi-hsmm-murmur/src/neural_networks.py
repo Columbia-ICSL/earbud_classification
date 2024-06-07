@@ -21,6 +21,8 @@ import torch.nn as nn
 import scipy.io as spio
 
 import torch.nn.functional as F
+import matplotlib.pyplot as plt
+
 
 
 #New Mamba
@@ -28,6 +30,7 @@ from mamba_ssm import Mamba
 from src.bimamba import Mamba as BiMamba 
 from src.mamba_blocks import MambaBlocksSequential
 import torchaudio.transforms as transforms #FOR MELS
+import torchaudio
 
 
 WINDOW_STEP = 0.020  # seconds
@@ -288,10 +291,9 @@ def calculate_features(recording: torch.Tensor, fs: int, norm=True) -> Tuple[tor
     recording = recording.float()
     recording -= recording.mean()
     recording /= recording.abs().max()
-
+    """
     # Calculate spectrogram
-    window_length = int(WINDOW_LENGTH * fs)
-    window_step = int(WINDOW_STEP * fs)
+
     spectrogram = (
         torch.stft(
             recording,
@@ -306,30 +308,35 @@ def calculate_features(recording: torch.Tensor, fs: int, norm=True) -> Tuple[tor
     )
 
     spectrogram = spectrogram[: calc_frequency_bins()]
+    """
+    
+    features_fs = int(1 / WINDOW_STEP)
+    window_length = int(WINDOW_LENGTH * fs)
+    window_step = int(WINDOW_STEP * fs)
+    n_mels = 128
+
+    mel_spectrogram = torchaudio.transforms.MelSpectrogram(
+    sample_rate=fs,
+    n_fft=window_length,
+    hop_length=window_step,
+    f_min=0,
+    f_max=fs/2,
+    n_mels=n_mels
+    )(recording)
+
+    # Convert to decibel units
+    #mel_spectrogram_db = torchaudio.transforms.AmplitudeToDB()(mel_spectrogram)
+
+
+    mel_spectrogram_db = mel_spectrogram[: calc_frequency_bins()]
 
     
-    NUM_MELS = spectrogram.shape[1]
-    # Apply mel filterbank
-    mel_transform = transforms.MelSpectrogram(
-        sample_rate=fs,
-        n_fft=window_length,
-        hop_length=window_step,
-        n_mels=    NUM_MELS 
-    )
-
-    mel_spectrogram = mel_transform(spectrogram)
-
-    features_fs = int(1 / WINDOW_STEP)
-
-    m_spec = mel_spectrogram[:,:,0]
-    del mel_spectrogram        
-
-    return m_spec, features_fs
+    return mel_spectrogram_db, features_fs
 
      
 
 
-#"""
+
 
 # Save your trained model.
 def save_challenge_model(model_folder, model, fold):
