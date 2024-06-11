@@ -1,0 +1,160 @@
+# SSAMBA: Self-Supervised Audio Mamba
+
+
+## Introduction
+This repository contains the official implementation (in PyTorch) of the the paper SSAMBA: Self-Supervised Audio Representation Learning with Mamba State Space Model. SSAMBA is an advanced audio representation learning model designed to leverage self-supervised learning techniques using the Mamba State Space Model. This project builds on the success of the Self-Supervised Audio Spectrogram Transformer (SSAST) and introduces novel methodologies to further enhance performance and efficiency on various audio tasks. 
+
+## Installation
+
+To install the necessary dependencies, you can use the following commands:
+
+Python version: 3.10.13
+Cuda version 11.8 
+
+```bash
+cd ssamba
+pip install -r requirements.txt
+pip install -r ssamba/src/Vim/vim/vim_requirements.txt
+```
+
+
+## Pretraining
+
+We pretrained SSAMBA with various sizes (base, small, tiny) for patches (250, 300, and 400) on a mixture of unlabeled audios from AudioSet and LibriSpeech. You can find these weights in the "Pretrained Model Weights" section below. However, if you want to pretrain the model from scratch, follow this recipe:
+
+1. **Navigate to the Directory**: Change to the directory containing the pretraining scripts. You can do this by running the following command in your terminal:
+    ```bash
+    cd ssamba/src/pretrain/murmur
+    ```
+
+2. **Adjust the Script**: Edit the `run_mask_patch_amba.sh` script to update the paths to your data files:
+Change the following paths to the corresponding ones: 
+
+Run_mask_patch_amba.sh:
+tr_data=/home/icsl/Documents/adrian/classification/pre_trained_mamba/data/train/circor_train.json
+te_data=/home/icsl/Documents/adrian/classification/pre_trained_mamba/data/eval/circor_test.json
+--label-csv /home/icsl/Documents/adrian/classification/pre_trained_mamba/class_labels_indices.csv 
+
+Run_amba.py:
+sys.path.append('/home/icsl/Documents/adrian/classification/pre_trained_mamba/ssamba')
+
+Both_models.py: 
+sys.path.append('/home/icsl/Documents/adrian/classification/pre_trained_mamba/ssamba/src/Vim')
+sys.path.append('/home/icsl/Documents/adrian/classification/pre_trained_mamba/ssamba/src/Vim/vim')
+sys.path.append('/home/icsl/Documents/adrian/classification/pre_trained_mamba/ssamba/src/Vim/mamba-1p1p1s')
+
+
+
+3. **Run the Script**: After making the necessary adjustments, execute the script to start the pretraining process. You can run the script directly from the terminal with the following command:
+    ```bash
+    ./run_mask_patch_amba.sh
+    ```
+
+## Pretrained Model Weights
+
+The pretrained model weights for our SSAMBA model in sizes (base, small, and tiny) for different number of masked patches (400, 300, 250) can be found at:
+
+[Pretrained Model Weights](https://drive.google.com/drive/u/1/folders/1E1gf5SxdSByDJ16_WQvzTKn8lIoYtZiX)
+
+## Finetuning
+
+### Audioset_20k and ESC-50
+
+To finetune the pretrained SSAMBA on the balanced Audioset or ESC-50 datasets, follow these steps:
+
+1. **Navigate to the finetuning directory:**
+   - For Audioset:
+     ```bash
+     cd src/finetune/audioset
+     ```
+   - For ESC-50:
+     ```bash
+     cd src/finetune/esc50
+     ```
+
+2. **Adjust the paths and hyperparameters:**
+   Edit `run_as_amba.sh` and `run_esc_patch_amba.sh`. Adjust the paths and hyperparameters as needed for your dataset.
+
+3. **Configure SLURM job submission (if using SLURM):**
+   Add the models you want to finetune to `submit_jobs.sh`:
+   ```bash
+   #!/bin/bash
+
+   # Array of pre-trained models
+   declare -a models=("ssamba_tiny_400")
+
+   # Submit a job for each model
+   for model in "${models[@]}"; do
+       sbatch run_as_amba.sh $model
+   done
+   ```
+
+4. **Run the job submission script:**
+   Execute the `submit_jobs.sh` script in the terminal to start the finetuning process:
+   ```bash
+   ./submit_jobs.sh
+   ```
+
+Make sure to monitor the jobs and adjust any parameters as needed to suit your specific requirements and hardware configuration.
+
+### VoxCeleb 
+
+### Step 1: Install the SUPERB Package
+
+1. **Clone the SUPERB repository**:
+   ```bash
+   git clone https://github.com/s3prl/s3prl.git
+   ```
+
+2. **Navigate to the s3prl directory**:
+   ```bash
+   cd s3prl
+   ```
+
+3. **Install the package**:
+   ```bash
+   pip install -e ./
+   ```
+
+### Step 2: Prepare the Fine-Tuning Scripts
+
+1. **Copy our files**:
+   - Copy the files from `src/finetune/voxceleb1/ssast` to `s3prl/s3prl/upstream/ssast`.
+
+### Step 3: Adjust Paths and Specify Models
+
+1. **Edit the `run_sid.sh` file**:
+   - Adjust the paths in the `run_sid.sh` file to point to the correct directories for your dataset and model.
+
+2. **Specify models in `submit_jobs_amba.sh`**:
+   - Edit the `submit_jobs_amba.sh` script to specify the models you want to fine-tune.
+
+### Step 4: Run the Fine-Tuning Script
+
+1. **Execute the `submit_jobs_amba.sh` script**:
+   - In the terminal, navigate to the directory containing `submit_jobs_amba.sh` and run:
+     ```bash
+     ./submit_jobs_amba.sh
+     ```
+
+
+
+## License
+The license for borrowed code can be found in [LICENSE](https://github.com/SiavashShams/ssamba/blob/main/LICENSE) file. 
+We acknowledge the wonderful work of [SSAST](https://arxiv.org/abs/2110.09784), and [Vision Mamba](https://arxiv.org/abs/2401.09417). 
+
+## Citing
+If you find this work helpful, please consider giving us a star 🌟 and citing:
+
+```bibtex
+@article{shams2024ssamba,
+      title={SSAMBA: Self-Supervised Audio Representation Learning with Mamba State Space Model},
+      author={Siavash Shams and Sukru Samet Dindar and Xilin Jiang and Nima Mesgarani},
+      year={2024},
+      eprint={2405.11831},
+      archivePrefix={arXiv},
+      primaryClass={eess.AS},
+      journal={arXiv preprint arXiv:2405.11831}
+}
+
+```
