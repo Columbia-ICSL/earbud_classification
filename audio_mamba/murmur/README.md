@@ -9,12 +9,20 @@ This repository contains the official implementation (in PyTorch) of the the pap
 To install the necessary dependencies, you can use the following commands:
 
 Python version: 3.10.13
-Cuda version 11.8 
+pytorch Cuda version 11.8 
+Torch 2.1.1 
+
+pip install torch==2.1.1 torchvision==0.16.1 torchaudio==2.1.1 --index-url https://download.pytorch.org/whl/cu118
+
 
 ```bash
+cd pre_trained_mamba
+git clone https://github.com/SiavashShams/ssamba.git
 cd ssamba
 pip install -r requirements.txt
-pip install -r ssamba/src/Vim/vim/vim_requirements.txt
+cd src
+git clone https://github.com/hustvl/Vim.git
+pip install -r /Vim/vim/vim_requirements.txt
 ```
 
 
@@ -28,7 +36,7 @@ We pretrained SSAMBA with various sizes (base, small, tiny) for patches (250, 30
     ```
 
 2. **Adjust the Script**: Edit the `run_mask_patch_amba.sh` script to update the paths to your data files:
-Change the following paths to the corresponding ones: 
+Change the following paths to the corresponding ones for the server that is running the model:
 
 Run_mask_patch_amba.sh:
 tr_data=/home/icsl/Documents/adrian/classification/pre_trained_mamba/data/train/circor_train.json
@@ -45,7 +53,7 @@ sys.path.append('/home/icsl/Documents/adrian/classification/pre_trained_mamba/ss
 
 
 
-3. **Run the Script**: After making the necessary adjustments, execute the script to start the pretraining process. You can run the script directly from the terminal with the following command:
+3. **Run the Script**: After making the necessary adjustments, execute the script to start the pretraining process. You can run the script directly from the terminal with the following command (from path ssamba/src/pretrain/murmur):
     ```bash
     ./run_mask_patch_amba.sh
     ```
@@ -57,7 +65,7 @@ The pretrained model weights for our SSAMBA model in sizes (base, small, and tin
 [Pretrained Model Weights](https://drive.google.com/drive/u/1/folders/1E1gf5SxdSByDJ16_WQvzTKn8lIoYtZiX)
 
 ## Finetuning
-
+TODO: Add finetune datasets 
 ### Audioset_20k and ESC-50
 
 To finetune the pretrained SSAMBA on the balanced Audioset or ESC-50 datasets, follow these steps:
