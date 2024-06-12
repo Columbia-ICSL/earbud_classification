@@ -44,14 +44,33 @@ te_data=/home/icsl/Documents/adrian/classification/pre_trained_mamba/data/eval/c
 --label-csv /home/icsl/Documents/adrian/classification/pre_trained_mamba/class_labels_indices.csv 
 
 Run_amba.py:
+```bash
+
 sys.path.append('/home/icsl/Documents/adrian/classification/pre_trained_mamba/ssamba')
+```
+
 
 Both_models.py: 
+```bash
 sys.path.append('/home/icsl/Documents/adrian/classification/pre_trained_mamba/ssamba/src/Vim')
 sys.path.append('/home/icsl/Documents/adrian/classification/pre_trained_mamba/ssamba/src/Vim/vim')
 sys.path.append('/home/icsl/Documents/adrian/classification/pre_trained_mamba/ssamba/src/Vim/mamba-1p1p1s')
+``` 
 
+2a. **Adjust Json files**: Edit the 'audio_mamba/murmur/adjust_json.py' scripte to update the paths to the data files:
+Include path to audio_mamba before each of specified paths
+```bash
+new_directory_path = "/audio_mamba/data/train/"
+input_json = '/audio_mamba/data/train/a.json'
+output_json = '/audio_mamba/data/train/circor_train.json'
 
+new_directory_path_ev = "/audio_mamba/data/eval/"
+input_json_ev = '/audio_mamba/data/eval/a.json'
+output_json_ev = '/audio_mamba/data/eval/circor_eval.json'
+
+```
+
+then run the adjust_json.py script 
 
 3. **Run the Script**: After making the necessary adjustments, execute the script to start the pretraining process. You can run the script directly from the terminal with the following command (from path ssamba/src/pretrain/murmur):
     ```bash
