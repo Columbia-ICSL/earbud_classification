@@ -43,7 +43,7 @@ def convert_wav_to_flac(wav_file_path, flac_file_path, wav_file_name):
     save_path = os.path.join(flac_file_path,wav_file_name[:len(wav_file_name)-4] + '.flac')
     print('flac made: ', save_path)
 
-    #sf.write(save_path, data_resampled, 16000, format='flac')
+    sf.write(save_path, data_resampled, 16000, format='flac')
 
     
 
@@ -152,7 +152,6 @@ read_dir = '/home/icsl/Documents/adrian/classification/the-circor-digiscope-phon
 
 # make csv for label types 
 csv_output = '/home/icsl/Documents/adrian/classification/pre_trained_mamba/class_labels_indices.csv'
-csv_output = '/home/icsl/Documents/adrian/classification/trash/class_indic.csv'
 
 with open(csv_output , 'w') as csvfile:
     csv_writer = csv.writer(csvfile)
@@ -162,7 +161,7 @@ with open(csv_output , 'w') as csvfile:
     for index , murmur_type in enumerate(unique_labels, start =1):
         csv_writer.writerow([index, murmur_type, murmur_type])
 
-flac_file_path = '/home/icsl/Documents/adrian/classification/trash'
+flac_file_path = '/home/icsl/Documents/adrian/classification/audio_mamba/data'
 
 # Loop through each file in the folder
 for filename in os.listdir(read_dir):
@@ -186,11 +185,11 @@ for subject_id in test_data:
     file_path = os.path.join(flac_file_path,'/test', f"{subject_id}.flac")
     test_json_entries.append(create_json_entry(file_path=file_path, label=subj_murmur_lookup[subject_id]))
 
-train_json_output_path = '/home/icsl/Documents/adrian/classification/pre_trained_mamba/data/train/a.json'
-test_json_output_path = '/home/icsl/Documents/adrian/classification/pre_trained_mamba/data/eval/a.json'
+train_json_output_path = '/home/icsl/Documents/adrian/classification/audio_mamba/data/train/a.json'
+test_json_output_path = '/home/icsl/Documents/adrian/classification/audio_mamba/data/test/a.json'
 
-train_json_output_path = '/home/icsl/Documents/adrian/classification/trash/train/a.json'
-test_json_output_path = '/home/icsl/Documents/adrian/classification/trash/test/a.json'
+#train_json_output_path = '/home/icsl/Documents/adrian/classification/trash/train/a.json'
+#test_json_output_path = '/home/icsl/Documents/adrian/classification/trash/test/a.json'
 
 # Write the training data JSON entries to a file
 with open(train_json_output_path, 'w') as train_json_file:
