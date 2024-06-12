@@ -10,8 +10,10 @@ import json
 import re
 
 import soundfile as sf
-import librosa
+#import librosa
 import random
+from scipy.signal import resample
+
 
 # Function to create JSON entries for each data entry
 def create_json_entry(file_path, label):
@@ -29,15 +31,19 @@ def convert_wav_to_flac(wav_file_path, flac_file_path, wav_file_name):
 
 
     # Resample the data to 16000 Hz (if it's not already at that sample rate)
-    if samplerate != 16000:
-        data_resampled = librosa.resample(data.T, samplerate, 16000).T
+    #if samplerate != 16000:
+    #    data_resampled = librosa.resample(data.T, 16000).T
 
+    if samplerate != 16000:
+        new_num_samples = int(len(data)*16000/samplerate)
+
+        data_resampled = resample(data,new_num_samples)
     # Write the resampled data to FLAC format
-   # print(flac_file_path)
 
     save_path = os.path.join(flac_file_path,wav_file_name[:len(wav_file_name)-4] + '.flac')
-    print(save_path)
-    sf.write(save_path, data_resampled, 16000, format='flac')
+    print('flac made: ', save_path)
+
+    #sf.write(save_path, data_resampled, 16000, format='flac')
 
     
 
@@ -53,22 +59,28 @@ def resample_each(file_path, lookup, save_path, read_dir, train_data):
 
             words = input.split()
             if len(words) == 3: #ID, number of locs, fs
+                
                 id = words[0]
-                nlocs = words[1]
-                fs = words[2]
-                murmur_type = lookup[id]
+                #nlocs = words[1]
+                #fs = words[2]
+                #murmur_type = lookup[id]
 
 
-                if id in train_data:
-                    out_path = os.path.join(save_path,'train')
-                else: 
-                    out_path = os.path.join(save_path,'eval')
+                #if id in train_data:
+                #    out_path = os.path.join(save_path,'train')
+                #else: 
+                #    out_path = os.path.join(save_path,'test')
 
 
             
             elif len(words) == 4 : # PV 49989_PV.hea 49989_PV.wav 49989_PV.tsv
                 wav_file = words[2]
                 read_file = os.path.join(read_dir,wav_file)
+
+                if wav_file[:len(wav_file)-4] in train_data:
+                    out_path = os.path.join(save_path,'train')
+                else: 
+                    out_path = os.path.join(save_path,'test')
 
                 convert_wav_to_flac(wav_file_path=read_file, flac_file_path=out_path, wav_file_name=wav_file)
 
@@ -90,6 +102,7 @@ def extract_data(csv_file_path):
             # Loop through each row in the CSV file
             for row in reader:
                 subject = row['Patient ID']
+                location = row['Recording locations:'].split('+')
                 murmur_data = row['Murmur'].lower()
                 systolic_timing_data = row['Systolic murmur timing'].lower()
                 
@@ -99,7 +112,12 @@ def extract_data(csv_file_path):
                 else : 
                     concatenated_data = murmur_data
 
-                subj_murmur[subject] = concatenated_data
+                
+                for loc in location:
+                    if loc:
+                        subject_info = f'{subject}_{loc}'
+                        subj_murmur[subject_info] = concatenated_data
+                        print('got file name' ,subject_info)
                 unique_values.add(concatenated_data)
             
     except IOError:
@@ -134,6 +152,7 @@ read_dir = '/home/icsl/Documents/adrian/classification/the-circor-digiscope-phon
 
 # make csv for label types 
 csv_output = '/home/icsl/Documents/adrian/classification/pre_trained_mamba/class_labels_indices.csv'
+csv_output = '/home/icsl/Documents/adrian/classification/trash/class_indic.csv'
 
 with open(csv_output , 'w') as csvfile:
     csv_writer = csv.writer(csvfile)
@@ -143,7 +162,7 @@ with open(csv_output , 'w') as csvfile:
     for index , murmur_type in enumerate(unique_labels, start =1):
         csv_writer.writerow([index, murmur_type, murmur_type])
 
-flac_file_path = '/home/icsl/Documents/adrian/classification/pre_trained_mamba/data'
+flac_file_path = '/home/icsl/Documents/adrian/classification/trash'
 
 # Loop through each file in the folder
 for filename in os.listdir(read_dir):
@@ -157,7 +176,9 @@ for filename in os.listdir(read_dir):
 train_json_entries = []
 for subject_id in train_data:
     file_path = os.path.join(flac_file_path,'/train',f"{subject_id}.flac")
+    print(file_path)
     train_json_entries.append(create_json_entry(file_path=file_path, label=subj_murmur_lookup[subject_id]))
+
 
 # Collect JSON entries for test data
 test_json_entries = []
@@ -165,8 +186,11 @@ for subject_id in test_data:
     file_path = os.path.join(flac_file_path,'/test', f"{subject_id}.flac")
     test_json_entries.append(create_json_entry(file_path=file_path, label=subj_murmur_lookup[subject_id]))
 
-train_json_output_path = '/home/icsl/Documents/adrian/classification/pre_trained_mamba/data/train/circor_train.json'
-test_json_output_path = '/home/icsl/Documents/adrian/classification/pre_trained_mamba/data/eval/circor_test.json'
+train_json_output_path = '/home/icsl/Documents/adrian/classification/pre_trained_mamba/data/train/a.json'
+test_json_output_path = '/home/icsl/Documents/adrian/classification/pre_trained_mamba/data/eval/a.json'
+
+train_json_output_path = '/home/icsl/Documents/adrian/classification/trash/train/a.json'
+test_json_output_path = '/home/icsl/Documents/adrian/classification/trash/test/a.json'
 
 # Write the training data JSON entries to a file
 with open(train_json_output_path, 'w') as train_json_file:

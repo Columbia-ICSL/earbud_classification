@@ -70,7 +70,7 @@ mixup=0
 
 exp_dir=./exp/amba-${model_size}-f${fshape}-t${tshape}-b$batch_size-lr${lr}-m${mask_patch}-${task}-${dataset}
 
-
+../../pre_trained_mamba/ssamba/src/
 CUDA_CACHE_DISABLE=1 python3 -W ignore ../../run_amba.py --use_wandb  --dataset ${dataset} \
 --data-train ${tr_data} --data-val ${te_data} --exp-dir $exp_dir \
 --label-csv /home/icsl/Documents/adrian/classification/pre_trained_mamba/class_labels_indices.csv \
